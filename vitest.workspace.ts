@@ -8,7 +8,8 @@ export default defineWorkspace([
       name: 'main',
       include: ['src/main/**/*.test.ts', 'src/shared/**/*.test.ts'],
       environment: 'node',
-      alias: { '@shared': resolve(__dirname, 'src/shared') }
+      alias: { '@shared': resolve(__dirname, 'src/shared') },
+      fakeTimers: { now: 0 }
     }
   },
   {
