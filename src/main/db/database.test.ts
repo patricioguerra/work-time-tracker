@@ -1,66 +1,48 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import initSqlJs, { type Database as SqlJsDatabase } from 'sql.js'
-import { runMigrations } from './database'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import Database from 'better-sqlite3'
+import { openDatabase, runMigrations } from './database'
 
 describe('database', () => {
-  let db: SqlJsDatabase
-  let SQL: any
+  let db: Database.Database
 
-  beforeEach(async () => {
-    SQL = await initSqlJs()
-    db = new SQL.Database()
-    runMigrations(db as any)
+  beforeEach(() => {
+    db = openDatabase(':memory:')
+    runMigrations(db)
   })
 
-  afterEach(() => {
-    if (db) {
-      db.close()
-    }
-  })
+  afterEach(() => db.close())
 
   it('creates the sessions table', () => {
-    const stmt = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='sessions'")
-    stmt.bind()
-    const hasRow = stmt.step()
-    stmt.free()
-    expect(hasRow).toBeTruthy()
+    const row = db
+      .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='sessions'")
+      .get()
+    expect(row).toBeTruthy()
   })
 
   it('creates the events table', () => {
-    const stmt = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='events'")
-    stmt.bind()
-    const hasRow = stmt.step()
-    stmt.free()
-    expect(hasRow).toBeTruthy()
+    const row = db
+      .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='events'")
+      .get()
+    expect(row).toBeTruthy()
   })
 
   it('sessions table has required columns', () => {
-    const stmt = db.prepare('PRAGMA table_info(sessions)')
-    const cols: string[] = []
-    stmt.bind()
-    while (stmt.step()) {
-      const row = stmt.getAsObject()
-      cols.push(row.name as string)
-    }
-    stmt.free()
+    const cols = (db.prepare('PRAGMA table_info(sessions)').all() as { name: string }[]).map(
+      (c) => c.name
+    )
     expect(cols).toEqual(expect.arrayContaining(['id', 'started_at', 'stopped_at', 'summary']))
   })
 
   it('events table has required columns', () => {
-    const stmt = db.prepare('PRAGMA table_info(events)')
-    const cols: string[] = []
-    stmt.bind()
-    while (stmt.step()) {
-      const row = stmt.getAsObject()
-      cols.push(row.name as string)
-    }
-    stmt.free()
+    const cols = (db.prepare('PRAGMA table_info(events)').all() as { name: string }[]).map(
+      (c) => c.name
+    )
     expect(cols).toEqual(
       expect.arrayContaining(['id', 'session_id', 'type', 'occurred_at'])
     )
   })
 
   it('runMigrations is idempotent', () => {
-    expect(() => runMigrations(db as any)).not.toThrow()
+    expect(() => runMigrations(db)).not.toThrow()
   })
 })
