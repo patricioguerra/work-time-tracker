@@ -48,6 +48,14 @@ describe('calculateActiveMs', () => {
     // total=7000, paused=1000+1000=2000 → active=5000
     expect(calculateActiveMs(1000, 8000, events)).toBe(5000)
   })
+
+  it('handles session stopped while paused (trailing unmatched pause)', () => {
+    const events: SessionEvent[] = [
+      { id: 1, session_id: 1, type: 'pause', occurred_at: 3000 }
+    ]
+    // started=0, paused=3000, stopped=5000 → active=3000, paused=2000
+    expect(calculateActiveMs(0, 5000, events)).toBe(3000)
+  })
 })
 
 describe('dateRangeDefaults', () => {

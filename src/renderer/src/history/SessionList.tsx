@@ -1,16 +1,16 @@
-import type { Session } from '@shared/types'
+import type { SessionDetail } from '@shared/types'
 import { SessionRow } from './SessionRow'
 import { calculateActiveMs, formatDuration } from '@shared/utils/time'
 
 interface SessionListProps {
-  sessions: Session[]
+  sessions: SessionDetail[]
   selectedId: number | null
   onSelect: (id: number) => void
 }
 
 export function SessionList({ sessions, selectedId, onSelect }: SessionListProps) {
   const totalActiveMs = sessions.reduce(
-    (sum, s) => sum + calculateActiveMs(s.started_at, s.stopped_at ?? Date.now(), []),
+    (sum, s) => sum + calculateActiveMs(s.started_at, s.stopped_at ?? Date.now(), s.events),
     0
   )
 

@@ -18,6 +18,7 @@ export default defineWorkspace([
       name: 'renderer',
       include: ['src/renderer/src/**/*.test.{ts,tsx}'],
       environment: 'jsdom',
+      globals: true,
       setupFiles: ['./src/renderer/src/test-setup.ts'],
       alias: {
         '@renderer': resolve(__dirname, 'src/renderer/src'),

@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 import { useHistoryStore } from './historyStore'
-import type { Session } from '@shared/types'
+import type { SessionDetail } from '@shared/types'
 
-const mockSessions: Session[] = [
-  { id: 1, started_at: 1000, stopped_at: 5000, summary: 'First session' },
-  { id: 2, started_at: 6000, stopped_at: 9000, summary: 'Second session' }
+const mockSessions: SessionDetail[] = [
+  { id: 1, started_at: 1000, stopped_at: 5000, summary: 'First session', events: [] },
+  { id: 2, started_at: 6000, stopped_at: 9000, summary: 'Second session', events: [] }
 ]
 
 const mockApi = {

@@ -50,7 +50,7 @@ describe('TimerService', () => {
     it('persists session to DB', () => {
       vi.setSystemTime(1000)
       timer.start()
-      const sessions = sessionRepo.queryByDateRange(0, 9999)
+      const sessions = db.prepare('SELECT * FROM sessions').all() as { started_at: number }[]
       expect(sessions).toHaveLength(1)
       expect(sessions[0].started_at).toBe(1000)
     })
@@ -58,7 +58,7 @@ describe('TimerService', () => {
     it('is a no-op if already running', () => {
       timer.start()
       timer.start()
-      expect(sessionRepo.queryByDateRange(0, 9999)).toHaveLength(1)
+      expect(db.prepare('SELECT * FROM sessions').all()).toHaveLength(1)
     })
   })
 
@@ -103,7 +103,7 @@ describe('TimerService', () => {
       timer.start()
       vi.setSystemTime(3000)
       timer.pause()
-      const session = sessionRepo.queryByDateRange(0, 9999)[0]
+      const session = db.prepare('SELECT * FROM sessions').get() as { id: number }
       const events = eventRepo.getBySessionId(session.id)
       expect(events).toHaveLength(1)
       expect(events[0].type).toBe('pause')
@@ -139,7 +139,7 @@ describe('TimerService', () => {
       timer.pause()
       vi.setSystemTime(5000)
       timer.resume()
-      const session = sessionRepo.queryByDateRange(0, 9999)[0]
+      const session = db.prepare('SELECT * FROM sessions').get() as { id: number }
       const events = eventRepo.getBySessionId(session.id)
       expect(events).toHaveLength(2)
       expect(events[1].type).toBe('resume')

@@ -20,7 +20,7 @@ export class SessionRepository {
   queryByDateRange(from: number, to: number): Session[] {
     return this.db
       .prepare(
-        'SELECT * FROM sessions WHERE started_at >= ? AND started_at <= ? ORDER BY started_at DESC'
+        'SELECT * FROM sessions WHERE started_at >= ? AND started_at <= ? AND stopped_at IS NOT NULL ORDER BY started_at DESC'
       )
       .all(from, to) as Session[]
   }

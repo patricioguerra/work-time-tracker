@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { TimerState, Session, SessionDetail } from '@shared/types'
+import type { TimerState, SessionDetail } from '@shared/types'
 
 contextBridge.exposeInMainWorld('api', {
   timer: {
@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld('api', {
     }
   },
   history: {
-    query: (from: number, to: number): Promise<Session[]> =>
+    query: (from: number, to: number): Promise<SessionDetail[]> =>
       ipcRenderer.invoke('history:query', from, to),
     getDetail: (sessionId: number): Promise<SessionDetail | null> =>
       ipcRenderer.invoke('history:getDetail', sessionId)

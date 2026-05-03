@@ -1,4 +1,4 @@
-import type { TimerState, Session, SessionDetail } from '@shared/types'
+import type { TimerState, SessionDetail } from '@shared/types'
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ declare global {
         onStateChange: (cb: (state: TimerState) => void) => () => void
       }
       history: {
-        query: (from: number, to: number) => Promise<Session[]>
+        query: (from: number, to: number) => Promise<SessionDetail[]>
         getDetail: (sessionId: number) => Promise<SessionDetail | null>
       }
     }

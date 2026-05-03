@@ -4,7 +4,7 @@ import { openUserDatabase, runMigrations } from './db/database'
 import { SessionRepository } from './db/SessionRepository'
 import { EventRepository } from './db/EventRepository'
 import { TimerService } from './timer/TimerService'
-import { registerTimerIpc } from './timer/timer.ipc'
+import { registerTimerIpcHandlers, bridgeTimerStateToWindow } from './timer/timer.ipc'
 import { registerHistoryIpc } from './history/history.ipc'
 import { TrayManager } from './tray/TrayManager'
 
@@ -21,13 +21,6 @@ function openWindow(): void {
 }
 
 function createWindow(): void {
-  const db = openUserDatabase()
-  runMigrations(db)
-
-  const sessionRepo = new SessionRepository(db)
-  const eventRepo = new EventRepository(db)
-  const timer = new TimerService(sessionRepo, eventRepo)
-
   win = new BrowserWindow({
     width: 900,
     height: 650,
@@ -38,13 +31,6 @@ function createWindow(): void {
     }
   })
 
-  registerTimerIpc(timer, win)
-  registerHistoryIpc(sessionRepo, eventRepo)
-
-  if (!tray) {
-    tray = new TrayManager(timer, openWindow)
-  }
-
   win.on('closed', () => { win = null })
 
   if (process.env['ELECTRON_RENDERER_URL']) {
@@ -54,7 +40,24 @@ function createWindow(): void {
   }
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  const db = openUserDatabase()
+  runMigrations(db)
+
+  const sessionRepo = new SessionRepository(db)
+  const eventRepo = new EventRepository(db)
+  const timer = new TimerService(sessionRepo, eventRepo)
+
+  registerTimerIpcHandlers(timer)
+  registerHistoryIpc(sessionRepo, eventRepo)
+
+  createWindow()
+
+  tray = new TrayManager(timer, openWindow)
+
+  // Push timer state to whichever window is currently focused.
+  bridgeTimerStateToWindow(timer, () => win)
+})
 
 app.on('window-all-closed', () => {
   // Keep running in tray on all platforms

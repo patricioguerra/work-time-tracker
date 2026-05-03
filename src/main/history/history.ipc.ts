@@ -7,8 +7,11 @@ export function registerHistoryIpc(
   sessionRepo: SessionRepository,
   eventRepo: EventRepository
 ): void {
-  ipcMain.handle('history:query', (_e, from: number, to: number) =>
-    sessionRepo.queryByDateRange(from, to)
+  ipcMain.handle('history:query', (_e, from: number, to: number): SessionDetail[] =>
+    sessionRepo.queryByDateRange(from, to).map((session) => ({
+      ...session,
+      events: eventRepo.getBySessionId(session.id)
+    }))
   )
 
   ipcMain.handle('history:getDetail', (_e, sessionId: number): SessionDetail | null => {

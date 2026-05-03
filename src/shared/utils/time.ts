@@ -25,6 +25,10 @@ export function calculateActiveMs(
     }
   }
 
+  if (pauseStart !== null) {
+    pausedMs += stoppedAt - pauseStart
+  }
+
   return stoppedAt - startedAt - pausedMs
 }
 

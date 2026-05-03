@@ -18,7 +18,7 @@ describe('EventRepository', () => {
     sessionId = sessionRepo.insert(1000)
   })
 
-  afterEach(() => db.close())
+  afterEach(() => { db.close() })
 
   it('inserts a pause event', () => {
     eventRepo.insert(sessionId, 'pause', 2000)

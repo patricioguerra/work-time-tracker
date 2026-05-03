@@ -2,13 +2,14 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi } from 'vitest'
 import { SessionRow } from './SessionRow'
-import type { Session } from '@shared/types'
+import type { SessionDetail } from '@shared/types'
 
-const session: Session = {
+const session: SessionDetail = {
   id: 1,
   started_at: new Date('2026-05-01T09:00:00').getTime(),
   stopped_at: new Date('2026-05-01T11:30:00').getTime(),
-  summary: 'Worked on the feature that does the thing and was very important for the release'
+  summary: 'Worked on the feature that does the thing and was very important for the release',
+  events: []
 }
 
 describe('SessionRow', () => {

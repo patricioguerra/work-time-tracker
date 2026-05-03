@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import type { Session } from '@shared/types'
+import type { SessionDetail } from '@shared/types'
 import { dateRangeDefaults } from '@shared/utils/time'
 
 export interface HistoryStore {
-  sessions: Session[]
+  sessions: SessionDetail[]
   selectedId: number | null
   from: number
   to: number

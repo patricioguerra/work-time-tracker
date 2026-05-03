@@ -13,7 +13,7 @@ describe('SessionRepository', () => {
     repo = new SessionRepository(db)
   })
 
-  afterEach(() => db.close())
+  afterEach(() => { db.close() })
 
   it('insert returns a positive integer id', () => {
     const id = repo.insert(1000)

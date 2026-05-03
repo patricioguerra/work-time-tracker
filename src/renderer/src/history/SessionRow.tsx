@@ -1,9 +1,9 @@
-import type { Session } from '@shared/types'
+import type { SessionDetail } from '@shared/types'
 import { formatDuration, calculateActiveMs } from '@shared/utils/time'
 import { cn } from '@renderer/lib/utils'
 
 interface SessionRowProps {
-  session: Session
+  session: SessionDetail
   selected: boolean
   onClick: () => void
 }
@@ -14,7 +14,7 @@ function truncate(text: string, max = 60): string {
 
 export function SessionRow({ session, selected, onClick }: SessionRowProps) {
   const date = new Date(session.started_at).toISOString().slice(0, 10)
-  const activeMs = calculateActiveMs(session.started_at, session.stopped_at ?? Date.now(), [])
+  const activeMs = calculateActiveMs(session.started_at, session.stopped_at ?? Date.now(), session.events)
   const summary = session.summary ?? ''
 
   return (

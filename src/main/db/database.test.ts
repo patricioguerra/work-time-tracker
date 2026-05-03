@@ -10,7 +10,7 @@ describe('database', () => {
     runMigrations(db)
   })
 
-  afterEach(() => db.close())
+  afterEach(() => { db.close() })
 
   it('creates the sessions table', () => {
     const row = db
