@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import type { Session } from '@shared/types'
 import { dateRangeDefaults } from '@shared/utils/time'
 
-interface HistoryStore {
+export interface HistoryStore {
   sessions: Session[]
   selectedId: number | null
   from: number

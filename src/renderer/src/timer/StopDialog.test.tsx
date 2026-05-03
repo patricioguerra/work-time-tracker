@@ -7,7 +7,7 @@ describe('StopDialog', () => {
   const onConfirm = vi.fn()
   const onCancel = vi.fn()
 
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => { vi.clearAllMocks() })
 
   it('renders the dialog with a summary textarea', () => {
     render(<StopDialog open onConfirm={onConfirm} onCancel={onCancel} />)
