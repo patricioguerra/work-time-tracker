@@ -144,4 +144,7 @@ vite.config.ts.timestamp-*
 
 # Git worktrees
 .worktrees/
-.worktrees/
+
+# Electron and build output
+.DS_Store
+*.db
