@@ -36,7 +36,6 @@ export function makeCircleIcon(r: number, g: number, b: number, size = 16): Elec
   const raw = Buffer.alloc(size * rowLen, 0)
 
   for (let y = 0; y < size; y++) {
-    raw[y * rowLen] = 0
     for (let x = 0; x < size; x++) {
       const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2)
       const alpha =

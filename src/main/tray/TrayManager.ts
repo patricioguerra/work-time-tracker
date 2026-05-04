@@ -4,18 +4,17 @@ import type { TimerService } from '../timer/TimerService'
 import { formatDuration } from '../../shared/utils/time'
 import { makeCircleIcon } from '../utils/icon'
 
-const ICONS = {
-  idle:    makeCircleIcon(150, 150, 150),
-  running: makeCircleIcon(34, 197, 94),
-  paused:  makeCircleIcon(249, 115, 22)
-}
-
 export class TrayManager {
   private tray: Tray
   private tickInterval: NodeJS.Timeout | null = null
+  private readonly icons = {
+    idle:    makeCircleIcon(150, 150, 150),
+    running: makeCircleIcon(34, 197, 94),
+    paused:  makeCircleIcon(249, 115, 22)
+  }
 
   constructor(private timer: TimerService, private openWindow: () => void) {
-    this.tray = new Tray(ICONS.idle)
+    this.tray = new Tray(this.icons.idle)
     this.tray.setToolTip('Work Time Tracker')
     this.timer.addListener((state) => this.onStateChange(state))
     this.rebuild(this.timer.getState())
@@ -40,7 +39,7 @@ export class TrayManager {
   }
 
   private rebuild(state: TimerState): void {
-    this.tray.setImage(ICONS[state.status])
+    this.tray.setImage(this.icons[state.status])
 
     const tooltip =
       state.status === 'idle'
@@ -71,7 +70,6 @@ export class TrayManager {
         enabled: state.status !== 'idle',
         click: () => {
           this.openWindow()
-          // User must complete the stop dialog in the renderer
         }
       },
       { type: 'separator' },
