@@ -7,6 +7,7 @@ import { makeCircleIcon } from '../utils/icon'
 export class TrayManager {
   private tray: Tray
   private tickInterval: NodeJS.Timeout | null = null
+  private lastStatus: TimerState['status'] | null = null
   private readonly icons = {
     idle:    makeCircleIcon(150, 150, 150),
     running: makeCircleIcon(34, 197, 94),
@@ -28,7 +29,7 @@ export class TrayManager {
     this.rebuildMenu(state)
 
     if (state.status === 'running') {
-      if (!this.tickInterval) {
+      if (!this.tickInterval && process.platform !== 'linux') {
         this.tickInterval = setInterval(() => {
           this.rebuildDisplay(this.timer.getState())
         }, 1000)
@@ -42,7 +43,10 @@ export class TrayManager {
   }
 
   private rebuildDisplay(state: TimerState): void {
-    this.tray.setImage(this.icons[state.status])
+    if (state.status !== this.lastStatus) {
+      this.tray.setImage(this.icons[state.status])
+      this.lastStatus = state.status
+    }
     if (state.status === 'idle') {
       this.tray.setTitle('')
       this.tray.setToolTip('Work Time Tracker')
