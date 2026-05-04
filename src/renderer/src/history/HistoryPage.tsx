@@ -12,29 +12,31 @@ export function HistoryPage() {
 
   return (
     <div className="flex h-full flex-col gap-4 p-4">
-      <div className="flex items-end gap-4">
+      <div className="flex items-end gap-4 rounded-lg border border-border bg-card p-3">
         <div className="space-y-1">
-          <Label htmlFor="from">From</Label>
+          <Label htmlFor="from" className="text-xs text-muted-foreground">From</Label>
           <Input
             id="from"
             type="date"
             value={toDateValue(from)}
             onChange={(e) => setRange(fromMs(e.target.value), to)}
+            className="w-36"
           />
         </div>
         <div className="space-y-1">
-          <Label htmlFor="to">To</Label>
+          <Label htmlFor="to" className="text-xs text-muted-foreground">To</Label>
           <Input
             id="to"
             type="date"
             value={toDateValue(to)}
             onChange={(e) => setRange(from, fromMs(e.target.value))}
+            className="w-36"
           />
         </div>
       </div>
 
       <div className="flex flex-1 gap-4 overflow-hidden">
-        <div className="flex-1 overflow-auto rounded border">
+        <div className="flex-1 overflow-auto rounded border border-border">
           <SessionList
             sessions={sessions}
             selectedId={selectedId}
@@ -42,7 +44,7 @@ export function HistoryPage() {
           />
         </div>
         {selectedId !== null && (
-          <div className="w-80 overflow-auto rounded border">
+          <div className="w-80 overflow-auto rounded border border-border">
             <SessionDetail sessionId={selectedId} />
           </div>
         )}

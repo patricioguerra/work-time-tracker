@@ -27,18 +27,20 @@ export function SessionDetail({ sessionId }: SessionDetailProps) {
 
   return (
     <div className="space-y-4 p-4 text-sm">
-      <div className="flex gap-4">
+      <div className="flex gap-4 text-muted-foreground">
         <div>
-          <span className="font-medium">Start:</span> {fmt(detail.started_at)}
+          <span className="font-medium text-foreground">Start:</span> {fmt(detail.started_at)}
         </div>
         <div>
-          <span className="font-medium">Stop:</span>{' '}
+          <span className="font-medium text-foreground">Stop:</span>{' '}
           {detail.stopped_at ? fmt(detail.stopped_at) : '—'}
         </div>
       </div>
 
       <div className="flex gap-4">
-        <Badge variant="secondary">Active: {formatDuration(activeMs)}</Badge>
+        <Badge className="bg-green-900/40 text-green-400 ring-1 ring-green-500/30 hover:bg-green-900/40">
+          Active: {formatDuration(activeMs)}
+        </Badge>
         <Badge variant="outline">Paused: {formatDuration(pausedMs)}</Badge>
       </div>
 

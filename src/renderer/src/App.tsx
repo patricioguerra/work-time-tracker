@@ -6,7 +6,7 @@ export function App() {
   return (
     <div className="flex h-screen flex-col">
       <Tabs defaultValue="timer" className="flex flex-1 flex-col">
-        <TabsList className="shrink-0 rounded-none border-b px-4">
+        <TabsList className="shrink-0 rounded-none border-b bg-card px-4">
           <TabsTrigger value="timer">Timer</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>

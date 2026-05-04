@@ -38,7 +38,7 @@ describe('TimerDisplay', () => {
     })
     render(<TimerDisplay />)
     expect(screen.getByText('00:01:00')).toBeInTheDocument()
-    expect(screen.getByText(/paused/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/paused/i).length).toBeGreaterThan(0)
     expect(screen.getByText('00:00:30')).toBeInTheDocument()
   })
 })

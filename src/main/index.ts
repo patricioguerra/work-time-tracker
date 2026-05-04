@@ -7,9 +7,13 @@ import { TimerService } from './timer/TimerService'
 import { registerTimerIpcHandlers, bridgeTimerStateToWindow } from './timer/timer.ipc'
 import { registerHistoryIpc } from './history/history.ipc'
 import { TrayManager } from './tray/TrayManager'
+import { makeCircleIcon } from './utils/icon'
 
 let win: BrowserWindow | null = null
 let tray: TrayManager | null = null
+let isQuitting = false
+
+const APP_ICON = makeCircleIcon(34, 197, 94, 256)
 
 function openWindow(): void {
   if (win && !win.isDestroyed()) {
@@ -24,6 +28,7 @@ function createWindow(): void {
   win = new BrowserWindow({
     width: 900,
     height: 650,
+    icon: APP_ICON,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
@@ -31,7 +36,11 @@ function createWindow(): void {
     }
   })
 
-  win.on('closed', () => { win = null })
+  win.on('close', (e) => {
+    if (isQuitting) return
+    e.preventDefault()
+    win?.hide()
+  })
 
   if (process.env['ELECTRON_RENDERER_URL']) {
     win.loadURL(process.env['ELECTRON_RENDERER_URL'])
@@ -54,8 +63,8 @@ app.whenReady().then(() => {
   createWindow()
 
   tray = new TrayManager(timer, openWindow)
+  console.log('[tray] Icon active. On GNOME/Fedora, install "AppIndicator and KStatusNotifierItem Support" extension if icon is not visible.')
 
-  // Push timer state to whichever window is currently focused.
   bridgeTimerStateToWindow(timer, () => win)
 })
 
@@ -68,5 +77,6 @@ app.on('activate', () => {
 })
 
 app.on('before-quit', () => {
+  isQuitting = true
   tray?.destroy()
 })

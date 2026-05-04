@@ -22,7 +22,7 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
     <div className="flex flex-col">
       <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="border-b text-xs text-muted-foreground uppercase">
+          <tr className="border-b border-border bg-card text-xs uppercase text-muted-foreground">
             <th className="px-4 py-2">Date</th>
             <th className="px-4 py-2">Duration</th>
             <th className="px-4 py-2">Summary</th>
@@ -40,7 +40,8 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
         </tbody>
       </table>
       <div className="mt-4 px-4 text-sm text-muted-foreground">
-        Total: <span className="font-mono font-medium">{formatDuration(totalActiveMs)}</span>
+        Total:{' '}
+        <span className="font-mono font-medium text-green-400">{formatDuration(totalActiveMs)}</span>
       </div>
     </div>
   )
