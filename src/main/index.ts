@@ -10,6 +10,7 @@ import { TrayManager } from './tray/TrayManager'
 
 let win: BrowserWindow | null = null
 let tray: TrayManager | null = null
+let isQuitting = false
 
 function openWindow(): void {
   if (win && !win.isDestroyed()) {
@@ -32,6 +33,7 @@ function createWindow(): void {
   })
 
   win.on('close', (e) => {
+    if (isQuitting) return
     e.preventDefault()
     win?.hide()
   })
@@ -71,5 +73,6 @@ app.on('activate', () => {
 })
 
 app.on('before-quit', () => {
+  isQuitting = true
   tray?.destroy()
 })
