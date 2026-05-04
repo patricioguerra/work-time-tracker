@@ -8,6 +8,7 @@ export interface HistoryStore {
   from: number
   to: number
   load: (from: number, to: number) => Promise<void>
+  reload: () => Promise<void>
   setRange: (from: number, to: number) => Promise<void>
   selectSession: (id: number) => void
 }
@@ -21,6 +22,12 @@ export const useHistoryStore = create<HistoryStore>((set, get) => ({
   to: defaults.to,
 
   load: async (from, to) => {
+    const sessions = await window.api.history.query(from, to)
+    set({ sessions })
+  },
+
+  reload: async () => {
+    const { from, to } = get()
     const sessions = await window.api.history.query(from, to)
     set({ sessions })
   },
