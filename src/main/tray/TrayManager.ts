@@ -16,18 +16,21 @@ export class TrayManager {
   constructor(private timer: TimerService, private openWindow: () => void) {
     this.tray = new Tray(this.icons.idle)
     this.tray.setToolTip('Work Time Tracker')
+    this.tray.on('click', () => this.openWindow())
     this.timer.addListener((state) => this.onStateChange(state))
-    this.rebuild(this.timer.getState())
+    const initial = this.timer.getState()
+    this.rebuildDisplay(initial)
+    this.rebuildMenu(initial)
   }
 
   private onStateChange(state: TimerState): void {
-    this.rebuild(state)
+    this.rebuildDisplay(state)
+    this.rebuildMenu(state)
 
     if (state.status === 'running') {
       if (!this.tickInterval) {
         this.tickInterval = setInterval(() => {
-          const current = this.timer.getState()
-          this.tray.setToolTip(`Running — ${formatDuration(current.elapsedActive)}`)
+          this.rebuildDisplay(this.timer.getState())
         }, 1000)
       }
     } else {
@@ -38,42 +41,34 @@ export class TrayManager {
     }
   }
 
-  private rebuild(state: TimerState): void {
+  private rebuildDisplay(state: TimerState): void {
     this.tray.setImage(this.icons[state.status])
+    if (state.status === 'idle') {
+      this.tray.setTitle('')
+      this.tray.setToolTip('Work Time Tracker')
+    } else {
+      this.tray.setTitle(formatDuration(state.elapsedActive))
+      const label = state.status === 'running' ? 'Running' : 'Paused'
+      this.tray.setToolTip(`${label} — ${formatDuration(state.elapsedActive)}`)
+    }
+  }
 
-    const tooltip =
-      state.status === 'idle'
-        ? 'Work Time Tracker'
-        : state.status === 'running'
-        ? `Running — ${formatDuration(state.elapsedActive)}`
-        : `Paused — ${formatDuration(state.elapsedActive)}`
-    this.tray.setToolTip(tooltip)
+  private rebuildMenu(state: TimerState): void {
+    const statusLabel =
+      state.status === 'idle' ? 'Work Time Tracker'
+      : state.status === 'running' ? 'Running'
+      : 'Paused'
 
     const menu = Menu.buildFromTemplate([
-      {
-        label: 'Start',
-        enabled: state.status === 'idle',
-        click: () => this.timer.start()
-      },
-      {
-        label: 'Pause',
-        enabled: state.status === 'running',
-        click: () => this.timer.pause()
-      },
-      {
-        label: 'Resume',
-        enabled: state.status === 'paused',
-        click: () => this.timer.resume()
-      },
-      {
-        label: 'Stop…',
-        enabled: state.status !== 'idle',
-        click: () => {
-          this.openWindow()
-        }
-      },
+      { label: statusLabel, enabled: false },
       { type: 'separator' },
-      { label: 'Open Window', click: () => this.openWindow() },
+      { label: 'Open', click: () => this.openWindow() },
+      { type: 'separator' },
+      { label: 'Start',  enabled: state.status === 'idle',    click: () => this.timer.start() },
+      { label: 'Pause',  enabled: state.status === 'running', click: () => this.timer.pause() },
+      { label: 'Resume', enabled: state.status === 'paused',  click: () => this.timer.resume() },
+      { label: 'Stop…',  enabled: state.status !== 'idle',    click: () => this.openWindow() },
+      { type: 'separator' },
       { label: 'Quit', click: () => app.quit() }
     ])
     this.tray.setContextMenu(menu)
