@@ -21,13 +21,13 @@ export function SessionRow({ session, selected, onClick }: SessionRowProps) {
     <tr
       role="row"
       className={cn(
-        'cursor-pointer border-b transition-colors hover:bg-muted/50',
-        selected && 'bg-muted'
+        'cursor-pointer border-b border-border transition-colors hover:bg-muted/50',
+        selected && 'bg-green-900/20 border-l-2 border-l-green-500'
       )}
       onClick={onClick}
     >
-      <td className="px-4 py-3 text-sm">{date}</td>
-      <td className="px-4 py-3 font-mono text-sm">{formatDuration(activeMs)}</td>
+      <td className="px-4 py-3 text-sm text-foreground">{date}</td>
+      <td className="px-4 py-3 font-mono text-sm text-green-400">{formatDuration(activeMs)}</td>
       <td className="px-4 py-3 text-sm text-muted-foreground" data-testid="summary">
         {truncate(summary)}
       </td>
