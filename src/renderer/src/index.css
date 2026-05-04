@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 95%;
-    --primary: 142 71% 45%;
-    --primary-foreground: 0 0% 5%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 80%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 95%;
-    --destructive: 0 72% 55%;
+    --background: 228 8% 5%;
+    --foreground: 228 6% 93%;
+    --card: 228 7% 8%;
+    --card-foreground: 228 6% 93%;
+    --primary: 158 52% 44%;
+    --primary-foreground: 228 10% 4%;
+    --secondary: 228 5% 13%;
+    --secondary-foreground: 228 4% 70%;
+    --muted: 228 5% 12%;
+    --muted-foreground: 228 4% 42%;
+    --accent: 228 5% 13%;
+    --accent-foreground: 228 6% 93%;
+    --destructive: 4 70% 56%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 142 71% 45%;
-    --radius: 0.5rem;
+    --border: 228 5% 15%;
+    --input: 228 5% 13%;
+    --ring: 158 52% 44%;
+    --radius: 0.375rem;
   }
 }
 
@@ -29,21 +29,61 @@
   * {
     @apply border-border;
   }
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'Outfit', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
+
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: hsl(0 0% 25%);
-    border-radius: 3px;
+    background: hsl(228 5% 22%);
+    border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(0 0% 35%);
+    background: hsl(228 5% 32%);
+  }
+
+  input[type='date'] {
+    color-scheme: dark;
+  }
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(0.45);
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0;
+    margin-left: 4px;
+  }
+  input[type='date']::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.9;
+  }
+  input[type='date']::-webkit-datetime-edit-fields-wrapper {
+    color: hsl(228 6% 80%);
+  }
+  input[type='date']::-webkit-datetime-edit-year-field,
+  input[type='date']::-webkit-datetime-edit-month-field,
+  input[type='date']::-webkit-datetime-edit-day-field {
+    color: hsl(228 6% 80%);
+  }
+  input[type='date']::-webkit-datetime-edit-year-field:focus,
+  input[type='date']::-webkit-datetime-edit-month-field:focus,
+  input[type='date']::-webkit-datetime-edit-day-field:focus {
+    background: hsl(158 52% 44% / 0.2);
+    color: hsl(158 60% 68%);
+    outline: none;
+    border-radius: 2px;
   }
 }
