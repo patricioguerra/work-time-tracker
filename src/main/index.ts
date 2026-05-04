@@ -7,10 +7,13 @@ import { TimerService } from './timer/TimerService'
 import { registerTimerIpcHandlers, bridgeTimerStateToWindow } from './timer/timer.ipc'
 import { registerHistoryIpc } from './history/history.ipc'
 import { TrayManager } from './tray/TrayManager'
+import { makeCircleIcon } from './utils/icon'
 
 let win: BrowserWindow | null = null
 let tray: TrayManager | null = null
 let isQuitting = false
+
+const APP_ICON = makeCircleIcon(34, 197, 94, 256)
 
 function openWindow(): void {
   if (win && !win.isDestroyed()) {
@@ -25,6 +28,7 @@ function createWindow(): void {
   win = new BrowserWindow({
     width: 900,
     height: 650,
+    icon: APP_ICON,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
