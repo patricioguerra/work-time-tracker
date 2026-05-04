@@ -4,6 +4,7 @@ import type { TimerState } from '@shared/types'
 interface TimerStore extends TimerState {
   applyState: (state: TimerState) => void
   syncFromMain: () => Promise<() => void>
+  tick: () => void
 }
 
 export const useTimerStore = create<TimerStore>((set) => ({
@@ -20,5 +21,11 @@ export const useTimerStore = create<TimerStore>((set) => ({
     set(initial)
     const unsub = window.api.timer.onStateChange((state) => set(state))
     return unsub
-  }
+  },
+
+  tick: () =>
+    set((s) => {
+      if (s.status !== 'running' || s.startedAt === null) return {}
+      return { elapsedActive: Date.now() - s.startedAt - s.elapsedPaused }
+    })
 }))

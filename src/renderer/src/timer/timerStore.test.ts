@@ -63,3 +63,48 @@ describe('useTimerStore', () => {
     expect(useTimerStore.getState().elapsedActive).toBe(3000)
   })
 })
+
+describe('tick', () => {
+  it('updates elapsedActive when running', () => {
+    const startedAt = Date.now() - 5000
+    useTimerStore.setState({
+      status: 'running',
+      startedAt,
+      elapsedActive: 0,
+      elapsedPaused: 1000,
+      pausedAt: null
+    })
+
+    act(() => {
+      useTimerStore.getState().tick()
+    })
+
+    const { elapsedActive } = useTimerStore.getState()
+    // 5000ms elapsed, 1000ms was paused → ~4000ms active
+    expect(elapsedActive).toBeGreaterThanOrEqual(3800)
+    expect(elapsedActive).toBeLessThanOrEqual(4200)
+  })
+
+  it('does not update elapsedActive when paused', () => {
+    useTimerStore.setState({
+      status: 'paused',
+      startedAt: Date.now() - 5000,
+      elapsedActive: 3000,
+      elapsedPaused: 2000,
+      pausedAt: Date.now()
+    })
+
+    act(() => {
+      useTimerStore.getState().tick()
+    })
+
+    expect(useTimerStore.getState().elapsedActive).toBe(3000)
+  })
+
+  it('does not update elapsedActive when idle', () => {
+    act(() => {
+      useTimerStore.getState().tick()
+    })
+    expect(useTimerStore.getState().elapsedActive).toBe(0)
+  })
+})
