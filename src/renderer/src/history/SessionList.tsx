@@ -15,17 +15,27 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
   )
 
   if (sessions.length === 0) {
-    return <p className="py-8 text-center text-sm text-muted-foreground">No sessions found.</p>
+    return (
+      <p className="py-10 text-center text-xs tracking-wide text-muted-foreground/40">
+        No sessions found
+      </p>
+    )
   }
 
   return (
     <div className="flex flex-col">
       <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="border-b border-border bg-card text-xs uppercase text-muted-foreground">
-            <th className="px-4 py-2">Date</th>
-            <th className="px-4 py-2">Duration</th>
-            <th className="px-4 py-2">Summary</th>
+          <tr className="border-b border-border/50">
+            <th className="px-4 py-2.5 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground/40">
+              Date
+            </th>
+            <th className="px-4 py-2.5 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground/40">
+              Duration
+            </th>
+            <th className="px-4 py-2.5 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground/40">
+              Summary
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -39,9 +49,14 @@ export function SessionList({ sessions, selectedId, onSelect }: SessionListProps
           ))}
         </tbody>
       </table>
-      <div className="mt-4 px-4 text-sm text-muted-foreground">
+      <div className="border-t border-border/30 px-4 py-3 text-[11px] text-muted-foreground/40">
         Total:{' '}
-        <span className="font-mono font-medium text-green-400">{formatDuration(totalActiveMs)}</span>
+        <span
+          className="font-mono text-emerald-400/80"
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+        >
+          {formatDuration(totalActiveMs)}
+        </span>
       </div>
     </div>
   )

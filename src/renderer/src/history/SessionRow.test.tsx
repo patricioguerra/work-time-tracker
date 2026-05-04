@@ -39,6 +39,6 @@ describe('SessionRow', () => {
 
   it('applies selected styling when selected', () => {
     render(<SessionRow session={session} selected onClick={vi.fn()} />)
-    expect(screen.getByRole('row')).toHaveClass('bg-green-900/20')
+    expect(screen.getByRole('row')).toHaveClass('bg-emerald-950/20')
   })
 })
