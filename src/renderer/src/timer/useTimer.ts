@@ -4,6 +4,8 @@ import { useTimerStore } from './timerStore'
 export function useTimer() {
   const unsubRef = useRef<(() => void) | null>(null)
   const syncFromMain = useTimerStore((s) => s.syncFromMain)
+  const tick = useTimerStore((s) => s.tick)
+  const status = useTimerStore((s) => s.status)
 
   useEffect(() => {
     let cancelled = false
@@ -15,6 +17,12 @@ export function useTimer() {
       unsubRef.current?.()
     }
   }, [syncFromMain])
+
+  useEffect(() => {
+    if (status !== 'running') return
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [status, tick])
 
   return {
     start: () => window.api.timer.start(),
