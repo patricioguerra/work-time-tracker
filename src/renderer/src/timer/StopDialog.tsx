@@ -32,25 +32,33 @@ export function StopDialog({ open, onConfirm, onCancel }: StopDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleCancel()}>
-      <DialogContent>
+      <DialogContent className="border-border/60 bg-card">
         <DialogHeader>
-          <DialogTitle>Stop Session</DialogTitle>
+          <DialogTitle className="text-sm font-medium tracking-wide text-foreground/80">
+            Stop Session
+          </DialogTitle>
         </DialogHeader>
-        <div className="space-y-2 py-2">
-          <Label htmlFor="summary">What did you work on?</Label>
+        <div className="space-y-2 py-1">
+          <Label
+            htmlFor="summary"
+            className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground/65"
+          >
+            What did you work on?
+          </Label>
           <Textarea
             id="summary"
             placeholder="Describe what you accomplished…"
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
             rows={4}
+            className="resize-none border-border/50 bg-secondary/40 text-sm placeholder:text-muted-foreground/45 focus-visible:border-primary/35 focus-visible:ring-1 focus-visible:ring-primary/20"
           />
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant="outline" size="sm" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button onClick={handleConfirm} disabled={!summary.trim()}>
+          <Button size="sm" onClick={handleConfirm} disabled={!summary.trim()}>
             Confirm
           </Button>
         </DialogFooter>
